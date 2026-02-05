@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="School fees structure and payment information for Baptist Model High School, Ilorin.">
+    <title>School Fees | Baptist Model High School, Ilorin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f3460;
+            --accent: #ffd60a;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: var(--gray-800); background: var(--white); }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; height: auto; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; z-index: 1000; }
+        .header-top { background: var(--primary); padding: 15px 0; text-align: center; }
+        .header-content { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .logo { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; }
+        .school-info { color: var(--white); }
+        .school-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .school-motto { color: var(--accent); font-weight: 600; font-size: 1.1rem; font-style: italic; }
+
+        .nav { background: var(--primary); position: sticky; top: 0; z-index: 999; }
+        .nav-container { display: flex; justify-content: center; align-items: center; position: relative; }
+        .nav-menu { display: flex; list-style: none; gap: 5px; }
+        .nav-menu a { display: block; padding: 15px 18px; color: var(--white); font-weight: 500; transition: all 0.3s ease; font-size: 0.95rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: var(--accent); color: var(--primary); }
+
+        .hamburger { display: none; flex-direction: column; cursor: pointer; padding: 15px; gap: 5px; background: none; border: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); }
+        .hamburger span { width: 25px; height: 3px; background: var(--white); transition: all 0.3s ease; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+        .page-header { background: linear-gradient(135deg, var(--primary) 0%, #1a4980 100%); color: var(--white); padding: 60px 0; text-align: center; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+
+        .breadcrumb { background: var(--gray-100); padding: 15px 0; }
+        .breadcrumb-list { display: flex; gap: 10px; list-style: none; font-size: 0.9rem; }
+        .breadcrumb-list a { color: var(--primary); }
+        .breadcrumb-list span { color: var(--gray-600); }
+
+        .section { padding: 80px 0; }
+        .section.alt { background: var(--gray-100); }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .section-title p { color: var(--gray-600); max-width: 600px; margin: 0 auto; }
+
+        /* Fees Notice */
+        .fees-notice { background: var(--accent); padding: 20px 30px; border-radius: 10px; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; }
+        .fees-notice .icon { font-size: 2rem; }
+        .fees-notice p { color: var(--primary); font-weight: 500; margin: 0; }
+
+        /* Fees Table */
+        .fees-table-wrapper { overflow-x: auto; margin-bottom: 40px; }
+        .fees-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        .fees-table thead { background: var(--primary); color: var(--white); }
+        .fees-table th { padding: 18px 20px; text-align: left; font-weight: 600; }
+        .fees-table td { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); }
+        .fees-table tbody tr:last-child td { border-bottom: none; }
+        .fees-table tbody tr:hover { background: var(--gray-100); }
+        .fees-table .amount { font-weight: 600; color: var(--primary); }
+        .fees-table .total-row { background: var(--primary); color: var(--white); font-weight: 700; }
+        .fees-table .total-row td { border-bottom: none; }
+        .fees-table .total-row .amount { color: var(--accent); }
+
+        /* Fee Category Cards */
+        .fee-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
+        .fee-card { background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        .fee-card-header { background: var(--primary); color: var(--white); padding: 20px 25px; }
+        .fee-card-header h3 { font-size: 1.3rem; margin-bottom: 5px; }
+        .fee-card-header span { color: var(--accent); font-size: 0.9rem; }
+        .fee-card-body { padding: 25px; }
+        .fee-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-200); }
+        .fee-item:last-child { border-bottom: none; }
+        .fee-item .label { color: var(--gray-600); }
+        .fee-item .value { font-weight: 600; color: var(--primary); }
+
+        /* Bank Details */
+        .bank-section { padding: 80px 0; background: var(--primary); }
+        .bank-section .section-title h2 { color: var(--white); }
+        .bank-section .section-title p { color: rgba(255,255,255,0.8); }
+        .bank-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .bank-card { background: var(--white); border-radius: 10px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .bank-card h3 { color: var(--primary); font-size: 1.4rem; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .bank-card h3::before { content: '🏦'; font-size: 1.5rem; }
+        .bank-detail { margin-bottom: 20px; }
+        .bank-detail label { display: block; color: var(--gray-600); font-size: 0.9rem; margin-bottom: 5px; }
+        .bank-detail span { display: block; color: var(--primary); font-size: 1.1rem; font-weight: 600; }
+        .copy-btn { background: var(--accent); color: var(--primary); border: none; padding: 12px 25px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .copy-btn:hover { background: #e6c109; transform: translateY(-2px); }
+
+        /* Payment Instructions */
+        .instructions-section { padding: 80px 0; background: var(--gray-100); }
+        .instructions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .instruction-card { background: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); text-align: center; }
+        .instruction-number { width: 50px; height: 50px; background: var(--primary); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; margin: 0 auto 20px; }
+        .instruction-card h3 { color: var(--primary); margin-bottom: 10px; }
+        .instruction-card p { color: var(--gray-600); font-size: 0.95rem; }
+
+        /* Important Notes */
+        .notes-section { padding: 60px 0; background: var(--accent); }
+        .notes-content { max-width: 800px; margin: 0 auto; }
+        .notes-content h2 { font-family: 'Playfair Display', serif; color: var(--primary); text-align: center; margin-bottom: 30px; }
+        .notes-list { list-style: none; }
+        .notes-list li { background: var(--white); padding: 15px 20px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .notes-list li::before { content: '📌'; font-size: 1.2rem; flex-shrink: 0; }
+        .notes-list li span { color: var(--gray-800); }
+
+        .footer { background: var(--primary); color: var(--white); padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h4 { color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; }
+        .footer-section p, .footer-section a { color: rgba(255,255,255,0.8); display: block; margin-bottom: 10px; transition: color 0.3s ease; }
+        .footer-section a:hover { color: var(--accent); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; text-align: center; color: rgba(255,255,255,0.7); }
+
+        @media (max-width: 768px) {
+            .school-name { font-size: 1.4rem; }
+            .hamburger { display: flex; }
+            .nav-container { flex-direction: column; }
+            .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--primary); position: absolute; top: 100%; left: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+            .nav-menu.active { display: flex; }
+            .nav-menu a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .page-header h1 { font-size: 2rem; }
+            .fees-notice { flex-direction: column; text-align: center; }
+            .fees-table th, .fees-table td { padding: 12px 15px; font-size: 0.9rem; }
+        }
+        @media (max-width: 480px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .logo { width: 70px; height: 70px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-content">
+                    <img src="logo.jpg" alt="Baptist Model High School Logo" class="logo">
+                    <div class="school-info">
+                        <h1 class="school-name">Baptist Model High School, Ilorin</h1>
+                        <p class="school-motto">"We Study To Serve"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="academics.html">Academics</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="staff.html">Staff</a></li>
+                <li><a href="fees.html" class="active">Fees</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="parent-form.html">Parent Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>School Fees</h1>
+            <p>Fee structure and payment information for 2024/2025 academic session</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Home</a></li>
+                <li>/</li>
+                <li><span>Fees</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Fees Table Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Fee Structure</h2>
+                <p>Complete breakdown of school fees for all classes</p>
+            </div>
+
+            <div class="fees-notice">
+                <span class="icon">📢</span>
+                <p>All fees are payable at the beginning of each term. Please ensure payment is completed before resumption to avoid disruption to your child's education.</p>
+            </div>
+
+            <!-- JSS Fees Table -->
+            <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 1.4rem;">Junior Secondary School (JSS 1 - JSS 3)</h3>
+            <div class="fees-table-wrapper">
+                <table class="fees-table">
+                    <thead>
+                        <tr>
+                            <th>Fee Description</th>
+                            <th>First Term</th>
+                            <th>Second Term</th>
+                            <th>Third Term</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tuition Fee</td>
+                            <td class="amount">₦25,000</td>
+                            <td class="amount">₦25,000</td>
+                            <td class="amount">₦25,000</td>
+                        </tr>
+                        <tr>
+                            <td>Development Levy</td>
+                            <td class="amount">₦10,000</td>
+                            <td class="amount">₦5,000</td>
+                            <td class="amount">₦5,000</td>
+                        </tr>
+                        <tr>
+                            <td>Laboratory Fee</td>
+                            <td class="amount">₦5,000</td>
+                            <td class="amount">₦3,000</td>
+                            <td class="amount">₦3,000</td>
+                        </tr>
+                        <tr>
+                            <td>Library Fee</td>
+                            <td class="amount">₦3,000</td>
+                            <td class="amount">₦2,000</td>
+                            <td class="amount">₦2,000</td>
+                        </tr>
+                        <tr>
+                            <td>Sports Fee</td>
+                            <td class="amount">₦3,000</td>
+                            <td class="amount">₦2,000</td>
+                            <td class="amount">₦2,000</td>
+                        </tr>
+                        <tr>
+                            <td>Examination Fee</td>
+                            <td class="amount">₦4,000</td>
+                            <td class="amount">₦4,000</td>
+                            <td class="amount">₦4,000</td>
+                        </tr>
+                        <tr>
+                            <td>ICT Fee</td>
+                            <td class="amount">₦5,000</td>
+                            <td class="amount">₦4,000</td>
+                            <td class="amount">₦4,000</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>Total</strong></td>
+                            <td class="amount">₦55,000</td>
+                            <td class="amount">₦45,000</td>
+                            <td class="amount">₦45,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SSS Fees Table -->
+            <h3 style="color: var(--primary); margin: 40px 0 20px; font-size: 1.4rem;">Senior Secondary School (SS 1 - SS 3)</h3>
+            <div class="fees-table-wrapper">
+                <table class="fees-table">
+                    <thead>
+                        <tr>
+                            <th>Fee Description</th>
+                            <th>First Term</th>
+                            <th>Second Term</th>
+                            <th>Third Term</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tuition Fee</td>
+                            <td class="amount">₦30,000</td>
+                            <td class="amount">₦30,000</td>
+                            <td class="amount">₦30,000</td>
+                        </tr>
+                        <tr>
+                            <td>Development Levy</td>
+                            <td class="amount">₦12,000</td>
+                            <td class="amount">₦6,000</td>
+                            <td class="amount">₦6,000</td>
+                        </tr>
+                        <tr>
+                            <td>Laboratory Fee</td>
+                            <td class="amount">₦8,000</td>
+                            <td class="amount">₦5,000</td>
+                            <td class="amount">₦5,000</td>
+                        </tr>
+                        <tr>
+                            <td>Library Fee</td>
+                            <td class="amount">₦4,000</td>
+                            <td class="amount">₦3,000</td>
+                            <td class="amount">₦3,000</td>
+                        </tr>
+                        <tr>
+                            <td>Sports Fee</td>
+                            <td class="amount">₦4,000</td>
+                            <td class="amount">₦3,000</td>
+                            <td class="amount">₦3,000</td>
+                        </tr>
+                        <tr>
+                            <td>Examination Fee</td>
+                            <td class="amount">₦5,000</td>
+                            <td class="amount">₦5,000</td>
+                            <td class="amount">₦5,000</td>
+                        </tr>
+                        <tr>
+                            <td>ICT Fee</td>
+                            <td class="amount">₦7,000</td>
+                            <td class="amount">₦5,000</td>
+                            <td class="amount">₦5,000</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>Total</strong></td>
+                            <td class="amount">₦70,000</td>
+                            <td class="amount">₦57,000</td>
+                            <td class="amount">₦57,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Other Fees -->
+            <div class="fee-categories">
+                <div class="fee-card">
+                    <div class="fee-card-header">
+                        <h3>New Student Fees</h3>
+                        <span>One-time payment for new admissions</span>
+                    </div>
+                    <div class="fee-card-body">
+                        <div class="fee-item">
+                            <span class="label">Admission Form</span>
+                            <span class="value">₦5,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">Registration Fee</span>
+                            <span class="value">₦15,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">School Uniform (Complete)</span>
+                            <span class="value">₦20,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">ID Card</span>
+                            <span class="value">₦2,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">School Bag & Materials</span>
+                            <span class="value">₦8,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fee-card">
+                    <div class="fee-card-header">
+                        <h3>Optional Fees</h3>
+                        <span>Additional services available</span>
+                    </div>
+                    <div class="fee-card-body">
+                        <div class="fee-item">
+                            <span class="label">School Bus (Per Term)</span>
+                            <span class="value">₦25,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">Lunch Program (Per Term)</span>
+                            <span class="value">₦30,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">Extra-Mural Classes</span>
+                            <span class="value">₦15,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">Music Lessons</span>
+                            <span class="value">₦10,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">Sports Academy</span>
+                            <span class="value">₦12,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fee-card">
+                    <div class="fee-card-header">
+                        <h3>Examination Fees</h3>
+                        <span>External examination registration</span>
+                    </div>
+                    <div class="fee-card-body">
+                        <div class="fee-item">
+                            <span class="label">BECE (JSS 3)</span>
+                            <span class="value">₦15,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">WAEC (SS 3)</span>
+                            <span class="value">₦35,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">NECO (SS 3)</span>
+                            <span class="value">₦28,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">NABTEB (Optional)</span>
+                            <span class="value">₦25,000</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="label">Mock Exams</span>
+                            <span class="value">₦8,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bank Details Section -->
+    <section class="bank-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Bank Account Details</h2>
+                <p>Make payments directly to our official bank accounts</p>
+            </div>
+
+            <div class="bank-cards">
+                <div class="bank-card">
+                    <h3>First Bank of Nigeria</h3>
+                    <div class="bank-detail">
+                        <label>Account Name</label>
+                        <span>Baptist Model High School, Ilorin</span>
+                    </div>
+                    <div class="bank-detail">
+                        <label>Account Number</label>
+                        <span id="acct1">2034567890</span>
+                    </div>
+                    <div class="bank-detail">
+                        <label>Account Type</label>
+                        <span>Current Account</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyAccount('2034567890')">
+                        📋 Copy Account Number
+                    </button>
+                </div>
+
+                <div class="bank-card">
+                    <h3>United Bank for Africa (UBA)</h3>
+                    <div class="bank-detail">
+                        <label>Account Name</label>
+                        <span>Baptist Model High School, Ilorin</span>
+                    </div>
+                    <div class="bank-detail">
+                        <label>Account Number</label>
+                        <span id="acct2">1023456789</span>
+                    </div>
+                    <div class="bank-detail">
+                        <label>Account Type</label>
+                        <span>Current Account</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyAccount('1023456789')">
+                        📋 Copy Account Number
+                    </button>
+                </div>
+
+                <div class="bank-card">
+                    <h3>Guaranty Trust Bank (GTB)</h3>
+                    <div class="bank-detail">
+                        <label>Account Name</label>
+                        <span>Baptist Model High School, Ilorin</span>
+                    </div>
+                    <div class="bank-detail">
+                        <label>Account Number</label>
+                        <span id="acct3">0123456789</span>
+                    </div>
+                    <div class="bank-detail">
+                        <label>Account Type</label>
+                        <span>Current Account</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyAccount('0123456789')">
+                        📋 Copy Account Number
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Instructions -->
+    <section class="instructions-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>How to Pay</h2>
+                <p>Follow these simple steps to complete your payment</p>
+            </div>
+
+            <div class="instructions-grid">
+                <div class="instruction-card">
+                    <div class="instruction-number">1</div>
+                    <h3>Make Payment</h3>
+                    <p>Transfer or deposit the required amount to any of our bank accounts listed above.</p>
+                </div>
+
+                <div class="instruction-card">
+                    <div class="instruction-number">2</div>
+                    <h3>Keep Your Receipt</h3>
+                    <p>Obtain and keep your bank teller or transfer receipt safe for verification.</p>
+                </div>
+
+                <div class="instruction-card">
+                    <div class="instruction-number">3</div>
+                    <h3>Submit Receipt</h3>
+                    <p>Bring the original receipt to the school bursar's office for documentation.</p>
+                </div>
+
+                <div class="instruction-card">
+                    <div class="instruction-number">4</div>
+                    <h3>Collect School Receipt</h3>
+                    <p>Receive your official school receipt which your child must present at resumption.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Important Notes -->
+    <section class="notes-section">
+        <div class="container">
+            <div class="notes-content">
+                <h2>📋 Important Notes</h2>
+                <ul class="notes-list">
+                    <li><span>All fees must be paid in full before the beginning of each term. Students with outstanding fees may not be allowed to resume.</span></li>
+                    <li><span>Please use your child's full name and class as the payment reference when making bank transfers.</span></li>
+                    <li><span>Fees are non-refundable once the term has commenced unless in exceptional circumstances approved by management.</span></li>
+                    <li><span>Parents are encouraged to pay early to avoid rush and ensure smooth resumption for their children.</span></li>
+                    <li><span>For any fee-related inquiries, please contact the Bursar's office during school hours or send an email to bursar@bmhsilorin.edu.ng</span></li>
+                    <li><span>Installment payment arrangements may be available in special cases. Please contact the school administration for details.</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About BMHS</h4>
+                    <p>Baptist Model High School, Ilorin is committed to providing quality education that prepares students for academic excellence and moral leadership.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="academics.html">Academics</a>
+                    <a href="fees.html">School Fees</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p>📍 Ilorin, Kwara State, Nigeria</p>
+                    <p>📞 +234 xxx xxx xxxx</p>
+                    <p>✉️ info@bmhsilorin.edu.ng</p>
+                </div>
+                <div class="footer-section">
+                    <h4>School Hours</h4>
+                    <p>Monday - Friday: 7:30 AM - 3:30 PM</p>
+                    <p>Saturday: Closed</p>
+                    <p>Sunday: Closed</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Baptist Model High School, Ilorin. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            this.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+        });
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+        });
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Copy Account Number
+        function copyAccount(accountNumber) {
+            navigator.clipboard.writeText(accountNumber).then(function() {
+                alert('Account number copied: ' + accountNumber);
+            }).catch(function() {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = accountNumber;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Account number copied: ' + accountNumber);
+            });
+        }
+    </script>
+</body>
+</html>

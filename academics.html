@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore the academic programs, curriculum, and subjects offered at Baptist Model High School, Ilorin.">
+    <title>Academics | Baptist Model High School, Ilorin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f3460;
+            --accent: #ffd60a;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: var(--gray-800); background: var(--white); }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; height: auto; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; z-index: 1000; }
+        .header-top { background: var(--primary); padding: 15px 0; text-align: center; }
+        .header-content { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .logo { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; }
+        .school-info { color: var(--white); }
+        .school-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .school-motto { color: var(--accent); font-weight: 600; font-size: 1.1rem; font-style: italic; }
+
+        .nav { background: var(--primary); position: sticky; top: 0; z-index: 999; }
+        .nav-container { display: flex; justify-content: center; align-items: center; position: relative; }
+        .nav-menu { display: flex; list-style: none; gap: 5px; }
+        .nav-menu a { display: block; padding: 15px 18px; color: var(--white); font-weight: 500; transition: all 0.3s ease; font-size: 0.95rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: var(--accent); color: var(--primary); }
+
+        .hamburger { display: none; flex-direction: column; cursor: pointer; padding: 15px; gap: 5px; background: none; border: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); }
+        .hamburger span { width: 25px; height: 3px; background: var(--white); transition: all 0.3s ease; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+        .page-header { background: linear-gradient(135deg, var(--primary) 0%, #1a4980 100%); color: var(--white); padding: 60px 0; text-align: center; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+
+        .breadcrumb { background: var(--gray-100); padding: 15px 0; }
+        .breadcrumb-list { display: flex; gap: 10px; list-style: none; font-size: 0.9rem; }
+        .breadcrumb-list a { color: var(--primary); }
+        .breadcrumb-list span { color: var(--gray-600); }
+
+        .section { padding: 80px 0; }
+        .section.alt { background: var(--gray-100); }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .section-title p { color: var(--gray-600); max-width: 600px; margin: 0 auto; }
+
+        .intro-text { max-width: 800px; margin: 0 auto; text-align: center; }
+        .intro-text p { color: var(--gray-600); font-size: 1.1rem; margin-bottom: 15px; }
+
+        .programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 50px; }
+        .program-card { background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease; }
+        .program-card:hover { transform: translateY(-5px); }
+        .program-header { background: var(--primary); color: var(--white); padding: 25px; }
+        .program-header h3 { font-size: 1.4rem; margin-bottom: 5px; }
+        .program-header span { color: var(--accent); font-size: 0.9rem; }
+        .program-content { padding: 25px; }
+        .program-content p { color: var(--gray-600); margin-bottom: 15px; }
+        .program-content ul { list-style: none; }
+        .program-content li { padding: 8px 0; border-bottom: 1px solid var(--gray-200); color: var(--gray-600); display: flex; align-items: center; gap: 10px; }
+        .program-content li:last-child { border-bottom: none; }
+        .program-content li::before { content: '✓'; color: var(--accent); font-weight: bold; }
+
+        .subjects-section { padding: 80px 0; }
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .subject-category { background: var(--white); border-radius: 10px; padding: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border-left: 4px solid var(--accent); }
+        .subject-category h3 { color: var(--primary); margin-bottom: 20px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .subject-category ul { list-style: none; }
+        .subject-category li { padding: 10px 0; border-bottom: 1px solid var(--gray-200); color: var(--gray-600); }
+        .subject-category li:last-child { border-bottom: none; }
+
+        .facilities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .facility-card { text-align: center; padding: 30px; background: var(--white); border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        .facility-icon { font-size: 3rem; margin-bottom: 15px; }
+        .facility-card h3 { color: var(--primary); margin-bottom: 10px; }
+        .facility-card p { color: var(--gray-600); font-size: 0.95rem; }
+
+        .exam-info { background: var(--primary); color: var(--white); padding: 60px 0; }
+        .exam-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .exam-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 10px; }
+        .exam-card h3 { color: var(--accent); margin-bottom: 15px; font-size: 1.3rem; }
+        .exam-card p { opacity: 0.9; margin-bottom: 15px; }
+        .exam-card ul { list-style: none; }
+        .exam-card li { padding: 8px 0; opacity: 0.9; display: flex; align-items: center; gap: 10px; }
+        .exam-card li::before { content: '•'; color: var(--accent); }
+
+        .footer { background: var(--primary); color: var(--white); padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h4 { color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; }
+        .footer-section p, .footer-section a { color: rgba(255,255,255,0.8); display: block; margin-bottom: 10px; transition: color 0.3s ease; }
+        .footer-section a:hover { color: var(--accent); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; text-align: center; color: rgba(255,255,255,0.7); }
+
+        @media (max-width: 768px) {
+            .school-name { font-size: 1.4rem; }
+            .hamburger { display: flex; }
+            .nav-container { flex-direction: column; }
+            .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--primary); position: absolute; top: 100%; left: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+            .nav-menu.active { display: flex; }
+            .nav-menu a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .page-header h1 { font-size: 2rem; }
+            .programs-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .logo { width: 70px; height: 70px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-content">
+                    <img src="logo.jpg" alt="Baptist Model High School Logo" class="logo">
+                    <div class="school-info">
+                        <h1 class="school-name">Baptist Model High School, Ilorin</h1>
+                        <p class="school-motto">"We Study To Serve"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="academics.html" class="active">Academics</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="staff.html">Staff</a></li>
+                <li><a href="fees.html">Fees</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="parent-form.html">Parent Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Academics</h1>
+            <p>Excellence in Education - Preparing Students for Success</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Home</a></li>
+                <li>/</li>
+                <li><span>Academics</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="intro-text">
+                <p>At Baptist Model High School, we offer a comprehensive curriculum designed to meet the Nigerian educational standards while preparing students for national and international examinations. Our academic program emphasizes critical thinking, practical skills, and moral development.</p>
+            </div>
+
+            <div class="programs-grid">
+                <div class="program-card">
+                    <div class="program-header">
+                        <h3>Junior Secondary School</h3>
+                        <span>JSS 1 - JSS 3</span>
+                    </div>
+                    <div class="program-content">
+                        <p>The Junior Secondary program provides a solid foundation in core subjects while introducing students to various disciplines.</p>
+                        <ul>
+                            <li>Basic Science & Technology</li>
+                            <li>Mathematics</li>
+                            <li>English Language</li>
+                            <li>Social Studies</li>
+                            <li>Cultural & Creative Arts</li>
+                            <li>Agricultural Science</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="program-card">
+                    <div class="program-header">
+                        <h3>Senior Secondary School</h3>
+                        <span>SS 1 - SS 3</span>
+                    </div>
+                    <div class="program-content">
+                        <p>Senior Secondary students choose specialized tracks based on their interests and career goals.</p>
+                        <ul>
+                            <li>Science Track</li>
+                            <li>Commercial/Business Track</li>
+                            <li>Arts/Humanities Track</li>
+                            <li>WAEC Preparation</li>
+                            <li>NECO Preparation</li>
+                            <li>UTME/JAMB Preparation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section alt">
+        <div class="container">
+            <div class="section-title">
+                <h2>Subjects Offered</h2>
+                <p>A comprehensive range of subjects to prepare students for any career path</p>
+            </div>
+
+            <div class="subjects-grid">
+                <div class="subject-category">
+                    <h3>📐 Science Subjects</h3>
+                    <ul>
+                        <li>Mathematics</li>
+                        <li>Further Mathematics</li>
+                        <li>Physics</li>
+                        <li>Chemistry</li>
+                        <li>Biology</li>
+                        <li>Agricultural Science</li>
+                        <li>Computer Science</li>
+                    </ul>
+                </div>
+
+                <div class="subject-category">
+                    <h3>💼 Commercial Subjects</h3>
+                    <ul>
+                        <li>Financial Accounting</li>
+                        <li>Commerce</li>
+                        <li>Economics</li>
+                        <li>Business Studies</li>
+                        <li>Office Practice</li>
+                        <li>Insurance</li>
+                    </ul>
+                </div>
+
+                <div class="subject-category">
+                    <h3>📚 Arts & Humanities</h3>
+                    <ul>
+                        <li>English Literature</li>
+                        <li>Government</li>
+                        <li>History</li>
+                        <li>Christian Religious Studies</li>
+                        <li>Islamic Religious Studies</li>
+                        <li>Civic Education</li>
+                    </ul>
+                </div>
+
+                <div class="subject-category">
+                    <h3>🗣️ Languages</h3>
+                    <ul>
+                        <li>English Language</li>
+                        <li>Yoruba</li>
+                        <li>French</li>
+                        <li>Arabic (Optional)</li>
+                    </ul>
+                </div>
+
+                <div class="subject-category">
+                    <h3>🎨 Technical & Vocational</h3>
+                    <ul>
+                        <li>Technical Drawing</li>
+                        <li>Basic Technology</li>
+                        <li>Food & Nutrition</li>
+                        <li>Home Economics</li>
+                        <li>Fine Arts</li>
+                        <li>Music</li>
+                    </ul>
+                </div>
+
+                <div class="subject-category">
+                    <h3>⚽ Physical Education</h3>
+                    <ul>
+                        <li>Physical & Health Education</li>
+                        <li>Football</li>
+                        <li>Basketball</li>
+                        <li>Athletics</li>
+                        <li>Table Tennis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="exam-info">
+        <div class="container">
+            <div class="section-title">
+                <h2 style="color: var(--white);">Examinations</h2>
+                <p style="color: rgba(255,255,255,0.8);">Preparing students for national and international examinations</p>
+            </div>
+
+            <div class="exam-grid">
+                <div class="exam-card">
+                    <h3>WAEC (WASSCE)</h3>
+                    <p>West African Senior School Certificate Examination - The primary school leaving examination for secondary schools.</p>
+                    <ul>
+                        <li>Intensive preparation classes</li>
+                        <li>Past question practice</li>
+                        <li>Mock examinations</li>
+                        <li>95%+ pass rate history</li>
+                    </ul>
+                </div>
+
+                <div class="exam-card">
+                    <h3>NECO</h3>
+                    <p>National Examination Council - An alternative national examination recognized across Nigeria.</p>
+                    <ul>
+                        <li>Comprehensive coverage</li>
+                        <li>Regular assessments</li>
+                        <li>Individual attention</li>
+                        <li>Excellent results track record</li>
+                    </ul>
+                </div>
+
+                <div class="exam-card">
+                    <h3>BECE (Junior WAEC)</h3>
+                    <p>Basic Education Certificate Examination for Junior Secondary School completion.</p>
+                    <ul>
+                        <li>Foundational preparation</li>
+                        <li>Skill assessment</li>
+                        <li>Career guidance</li>
+                        <li>Progression planning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Learning Facilities</h2>
+                <p>Modern facilities to support quality education</p>
+            </div>
+
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-icon">🔬</div>
+                    <h3>Science Laboratories</h3>
+                    <p>Fully equipped Physics, Chemistry, and Biology labs for practical learning.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">💻</div>
+                    <h3>Computer Lab</h3>
+                    <p>Modern computer laboratory with internet access for ICT education.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">📚</div>
+                    <h3>Library</h3>
+                    <p>Well-stocked library with textbooks, reference materials, and reading spaces.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🎯</div>
+                    <h3>Smart Classrooms</h3>
+                    <p>Modern classrooms with visual aids and conducive learning environment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About BMHS</h4>
+                    <p>Baptist Model High School, Ilorin is committed to providing quality education that prepares students for academic excellence and moral leadership.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="academics.html">Academics</a>
+                    <a href="fees.html">School Fees</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p>📍 Ilorin, Kwara State, Nigeria</p>
+                    <p>📞 +234 xxx xxx xxxx</p>
+                    <p>✉️ info@bmhsilorin.edu.ng</p>
+                </div>
+                <div class="footer-section">
+                    <h4>School Hours</h4>
+                    <p>Monday - Friday: 7:30 AM - 3:30 PM</p>
+                    <p>Saturday: Closed</p>
+                    <p>Sunday: Closed</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Baptist Model High School, Ilorin. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            this.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+        });
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+        });
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+</html>

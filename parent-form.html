@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Parent Portal - Submit inquiries and applications to Baptist Model High School, Ilorin.">
+    <title>Parent Portal | Baptist Model High School, Ilorin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f3460;
+            --accent: #ffd60a;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+            --success: #28a745;
+            --error: #dc3545;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: var(--gray-800); background: var(--white); }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; height: auto; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; z-index: 1000; }
+        .header-top { background: var(--primary); padding: 15px 0; text-align: center; }
+        .header-content { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .logo { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; }
+        .school-info { color: var(--white); }
+        .school-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .school-motto { color: var(--accent); font-weight: 600; font-size: 1.1rem; font-style: italic; }
+
+        .nav { background: var(--primary); position: sticky; top: 0; z-index: 999; }
+        .nav-container { display: flex; justify-content: center; align-items: center; position: relative; }
+        .nav-menu { display: flex; list-style: none; gap: 5px; }
+        .nav-menu a { display: block; padding: 15px 18px; color: var(--white); font-weight: 500; transition: all 0.3s ease; font-size: 0.95rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: var(--accent); color: var(--primary); }
+
+        .hamburger { display: none; flex-direction: column; cursor: pointer; padding: 15px; gap: 5px; background: none; border: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); }
+        .hamburger span { width: 25px; height: 3px; background: var(--white); transition: all 0.3s ease; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+        .page-header { background: linear-gradient(135deg, var(--primary) 0%, #1a4980 100%); color: var(--white); padding: 60px 0; text-align: center; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+
+        .breadcrumb { background: var(--gray-100); padding: 15px 0; }
+        .breadcrumb-list { display: flex; gap: 10px; list-style: none; font-size: 0.9rem; }
+        .breadcrumb-list a { color: var(--primary); }
+        .breadcrumb-list span { color: var(--gray-600); }
+
+        .section { padding: 80px 0; }
+        .section.alt { background: var(--gray-100); }
+
+        /* Portal Intro */
+        .portal-intro { max-width: 800px; margin: 0 auto 50px; text-align: center; }
+        .portal-intro h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary); margin-bottom: 15px; }
+        .portal-intro p { color: var(--gray-600); font-size: 1.1rem; }
+
+        /* Info Box */
+        .info-box { background: linear-gradient(135deg, var(--accent) 0%, #e6c109 100%); padding: 30px; border-radius: 15px; margin-bottom: 40px; }
+        .info-box h3 { color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .info-box ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .info-box li { color: var(--primary); padding: 8px 0; display: flex; align-items: center; gap: 10px; }
+        .info-box li::before { content: '✓'; background: var(--primary); color: var(--accent); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+
+        /* Form Container */
+        .form-container { max-width: 900px; margin: 0 auto; background: var(--white); padding: 50px; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); }
+
+        /* Form Sections */
+        .form-section { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 2px solid var(--gray-200); }
+        .form-section:last-of-type { border-bottom: none; margin-bottom: 30px; padding-bottom: 0; }
+        .form-section-title { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .section-number { width: 40px; height: 40px; background: var(--primary); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; }
+        .form-section-title h3 { color: var(--primary); font-size: 1.3rem; }
+
+        /* Form Elements */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--primary); font-weight: 600; font-size: 0.95rem; }
+        .form-group label .required { color: var(--error); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 14px 16px; border: 2px solid var(--gray-200); border-radius: 10px; font-family: inherit; font-size: 1rem; transition: all 0.3s ease; background: var(--white); }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(15, 52, 96, 0.1); }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        .form-group small { display: block; margin-top: 5px; color: var(--gray-600); font-size: 0.85rem; }
+
+        /* Radio & Checkbox */
+        .radio-group, .checkbox-group { display: flex; flex-wrap: wrap; gap: 20px; }
+        .radio-item, .checkbox-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .radio-item input, .checkbox-item input { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
+        .radio-item label, .checkbox-item label { cursor: pointer; color: var(--gray-800); font-weight: normal; margin-bottom: 0; }
+
+        /* Submit Button */
+        .btn { display: inline-block; padding: 16px 40px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1.1rem; }
+        .btn-primary { background: var(--primary); color: var(--white); }
+        .btn-primary:hover { background: #0a2545; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(15, 52, 96, 0.3); }
+        .btn-block { display: block; width: 100%; }
+
+        /* Success Message */
+        .success-message { display: none; background: var(--success); color: var(--white); padding: 25px; border-radius: 10px; margin-bottom: 30px; text-align: center; }
+        .success-message.show { display: block; }
+        .success-message h3 { margin-bottom: 10px; }
+
+        /* Process Steps */
+        .process-section { padding: 80px 0; background: var(--primary); }
+        .process-section h2 { font-family: 'Playfair Display', serif; color: var(--white); text-align: center; margin-bottom: 50px; font-size: 2rem; }
+        .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .process-card { background: rgba(255,255,255,0.1); padding: 35px; border-radius: 15px; text-align: center; position: relative; }
+        .process-number { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 45px; height: 45px; background: var(--accent); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; }
+        .process-icon { font-size: 3rem; margin: 20px 0 15px; }
+        .process-card h3 { color: var(--accent); margin-bottom: 10px; }
+        .process-card p { color: rgba(255,255,255,0.85); font-size: 0.95rem; }
+
+        /* Requirements */
+        .requirements-section { padding: 80px 0; background: var(--gray-100); }
+        .requirements-section h2 { font-family: 'Playfair Display', serif; color: var(--primary); text-align: center; margin-bottom: 40px; font-size: 2rem; }
+        .requirements-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto; }
+        .requirement-card { background: var(--white); padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border-left: 5px solid var(--accent); }
+        .requirement-card h4 { color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+        .requirement-card ul { list-style: none; }
+        .requirement-card li { padding: 10px 0; color: var(--gray-600); display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid var(--gray-200); }
+        .requirement-card li:last-child { border-bottom: none; }
+        .requirement-card li::before { content: '📌'; font-size: 1rem; }
+
+        /* CTA Section */
+        .cta-section { padding: 60px 0; background: var(--accent); text-align: center; }
+        .cta-section h2 { font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 15px; }
+        .cta-section p { color: var(--primary); margin-bottom: 25px; opacity: 0.9; }
+        .cta-section .btn-primary { background: var(--primary); color: var(--white); }
+
+        .footer { background: var(--primary); color: var(--white); padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h4 { color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; }
+        .footer-section p, .footer-section a { color: rgba(255,255,255,0.8); display: block; margin-bottom: 10px; transition: color 0.3s ease; }
+        .footer-section a:hover { color: var(--accent); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; text-align: center; color: rgba(255,255,255,0.7); }
+
+        @media (max-width: 768px) {
+            .school-name { font-size: 1.4rem; }
+            .hamburger { display: flex; }
+            .nav-container { flex-direction: column; }
+            .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--primary); position: absolute; top: 100%; left: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+            .nav-menu.active { display: flex; }
+            .nav-menu a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .page-header h1 { font-size: 2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-container { padding: 30px 20px; }
+            .radio-group, .checkbox-group { flex-direction: column; gap: 15px; }
+        }
+        @media (max-width: 480px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .logo { width: 70px; height: 70px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-content">
+                    <img src="logo.jpg" alt="Baptist Model High School Logo" class="logo">
+                    <div class="school-info">
+                        <h1 class="school-name">Baptist Model High School, Ilorin</h1>
+                        <p class="school-motto">"We Study To Serve"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="academics.html">Academics</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="staff.html">Staff</a></li>
+                <li><a href="fees.html">Fees</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="parent-form.html" class="active">Parent Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Parent Portal</h1>
+            <p>Submit inquiries and start your child's admission process</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Home</a></li>
+                <li>/</li>
+                <li><span>Parent Portal</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="portal-intro">
+                <h2>Welcome to the Parent Portal</h2>
+                <p>Complete the form below to submit an inquiry or begin the admission process for your child. Our admissions team will review your submission and contact you within 2-3 business days.</p>
+            </div>
+
+            <div class="form-container">
+                <div class="info-box">
+                    <h3>📋 Before You Begin</h3>
+                    <ul>
+                        <li>Student's full name and date of birth</li>
+                        <li>Current/previous school information</li>
+                        <li>Parent/guardian contact details</li>
+                        <li>Preferred class for admission</li>
+                    </ul>
+                </div>
+
+                <div class="success-message" id="successMessage">
+                    <h3>✅ Application Submitted Successfully!</h3>
+                    <p>Thank you for your submission. Our admissions team will contact you within 2-3 business days.</p>
+                </div>
+
+                <!-- Parent/Student Application Form - Using Formspree -->
+                <form id="parentForm" action="https://formspree.io/f/xpzndrwk" method="POST">
+                    <input type="hidden" name="_subject" value="New Parent Portal Submission - BMHS">
+                    <input type="hidden" name="_to" value="Jasonjeremiah201022@gmail.com">
+
+                    <!-- Section 1: Student Information -->
+                    <div class="form-section">
+                        <div class="form-section-title">
+                            <span class="section-number">1</span>
+                            <h3>Student Information</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentFirstName">First Name <span class="required">*</span></label>
+                                <input type="text" id="studentFirstName" name="studentFirstName" required placeholder="Enter student's first name">
+                            </div>
+                            <div class="form-group">
+                                <label for="studentLastName">Last Name <span class="required">*</span></label>
+                                <input type="text" id="studentLastName" name="studentLastName" required placeholder="Enter student's last name">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentMiddleName">Middle Name</label>
+                                <input type="text" id="studentMiddleName" name="studentMiddleName" placeholder="Enter student's middle name">
+                            </div>
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Gender <span class="required">*</span></label>
+                                <div class="radio-group">
+                                    <div class="radio-item">
+                                        <input type="radio" id="male" name="gender" value="Male" required>
+                                        <label for="male">Male</label>
+                                    </div>
+                                    <div class="radio-item">
+                                        <input type="radio" id="female" name="gender" value="Female">
+                                        <label for="female">Female</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="classApplying">Class Applying For <span class="required">*</span></label>
+                                <select id="classApplying" name="classApplying" required>
+                                    <option value="">Select Class</option>
+                                    <option value="JSS 1">JSS 1</option>
+                                    <option value="JSS 2">JSS 2</option>
+                                    <option value="JSS 3">JSS 3</option>
+                                    <option value="SS 1">SS 1</option>
+                                    <option value="SS 2">SS 2</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="currentSchool">Current/Previous School</label>
+                                <input type="text" id="currentSchool" name="currentSchool" placeholder="Name of current or previous school">
+                            </div>
+                            <div class="form-group">
+                                <label for="currentClass">Current Class</label>
+                                <input type="text" id="currentClass" name="currentClass" placeholder="e.g., Primary 6, JSS 2">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="studentAddress">Home Address <span class="required">*</span></label>
+                            <textarea id="studentAddress" name="studentAddress" required placeholder="Enter full home address"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Parent/Guardian Information -->
+                    <div class="form-section">
+                        <div class="form-section-title">
+                            <span class="section-number">2</span>
+                            <h3>Parent/Guardian Information</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="parentFirstName">First Name <span class="required">*</span></label>
+                                <input type="text" id="parentFirstName" name="parentFirstName" required placeholder="Enter parent's first name">
+                            </div>
+                            <div class="form-group">
+                                <label for="parentLastName">Last Name <span class="required">*</span></label>
+                                <input type="text" id="parentLastName" name="parentLastName" required placeholder="Enter parent's last name">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="relationship">Relationship to Student <span class="required">*</span></label>
+                                <select id="relationship" name="relationship" required>
+                                    <option value="">Select Relationship</option>
+                                    <option value="Father">Father</option>
+                                    <option value="Mother">Mother</option>
+                                    <option value="Guardian">Guardian</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="occupation">Occupation <span class="required">*</span></label>
+                                <input type="text" id="occupation" name="occupation" required placeholder="Enter your occupation">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="parentEmail">Email Address <span class="required">*</span></label>
+                                <input type="email" id="parentEmail" name="parentEmail" required placeholder="Enter your email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="parentPhone">Phone Number <span class="required">*</span></label>
+                                <input type="tel" id="parentPhone" name="parentPhone" required placeholder="e.g., 08012345678">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alternatePhone">Alternate Phone Number</label>
+                            <input type="tel" id="alternatePhone" name="alternatePhone" placeholder="Enter alternate phone number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="parentAddress">Residential Address <span class="required">*</span></label>
+                            <textarea id="parentAddress" name="parentAddress" required placeholder="Enter your full residential address"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Additional Information -->
+                    <div class="form-section">
+                        <div class="form-section-title">
+                            <span class="section-number">3</span>
+                            <h3>Additional Information</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inquiryType">Type of Inquiry <span class="required">*</span></label>
+                            <select id="inquiryType" name="inquiryType" required>
+                                <option value="">Select Inquiry Type</option>
+                                <option value="New Admission">New Admission</option>
+                                <option value="Transfer">Transfer from Another School</option>
+                                <option value="Information Request">General Information Request</option>
+                                <option value="Schedule Visit">Schedule a Campus Visit</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="preferredStartTerm">Preferred Start Term</label>
+                            <select id="preferredStartTerm" name="preferredStartTerm">
+                                <option value="">Select Term</option>
+                                <option value="First Term 2025">First Term 2025</option>
+                                <option value="Second Term 2025">Second Term 2025</option>
+                                <option value="Third Term 2025">Third Term 2025</option>
+                                <option value="First Term 2026">First Term 2026</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="howDidYouHear">How did you hear about us?</label>
+                            <select id="howDidYouHear" name="howDidYouHear">
+                                <option value="">Select an option</option>
+                                <option value="Word of Mouth">Word of Mouth</option>
+                                <option value="Internet Search">Internet Search</option>
+                                <option value="Social Media">Social Media</option>
+                                <option value="School Alumni">School Alumni</option>
+                                <option value="Church">Church</option>
+                                <option value="Advertisement">Advertisement</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Services Interested In</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="busService" name="services" value="School Bus">
+                                    <label for="busService">School Bus Service</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="lunchProgram" name="services" value="Lunch Program">
+                                    <label for="lunchProgram">Lunch Program</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="extraMural" name="services" value="Extra-Mural Classes">
+                                    <label for="extraMural">Extra-Mural Classes</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additionalInfo">Additional Comments or Questions</label>
+                            <textarea id="additionalInfo" name="additionalInfo" placeholder="Any additional information you'd like to share or questions you have..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                <label for="agreeTerms">I confirm that all information provided is accurate and I agree to be contacted by Baptist Model High School regarding this inquiry. <span class="required">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admission Process -->
+    <section class="process-section">
+        <div class="container">
+            <h2>Admission Process</h2>
+            <div class="process-grid">
+                <div class="process-card">
+                    <span class="process-number">1</span>
+                    <div class="process-icon">📝</div>
+                    <h3>Submit Form</h3>
+                    <p>Complete and submit the online inquiry form with all required information.</p>
+                </div>
+                <div class="process-card">
+                    <span class="process-number">2</span>
+                    <div class="process-icon">📞</div>
+                    <h3>We Contact You</h3>
+                    <p>Our admissions team will reach out within 2-3 business days to discuss next steps.</p>
+                </div>
+                <div class="process-card">
+                    <span class="process-number">3</span>
+                    <div class="process-icon">📋</div>
+                    <h3>Entrance Exam</h3>
+                    <p>Schedule and complete the entrance examination at our school campus.</p>
+                </div>
+                <div class="process-card">
+                    <span class="process-number">4</span>
+                    <div class="process-icon">✅</div>
+                    <h3>Enrollment</h3>
+                    <p>Upon successful completion, finalize enrollment by paying fees and collecting materials.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Requirements -->
+    <section class="requirements-section">
+        <div class="container">
+            <h2>Admission Requirements</h2>
+            <div class="requirements-grid">
+                <div class="requirement-card">
+                    <h4>📄 Documents Required</h4>
+                    <ul>
+                        <li>Birth Certificate or Age Declaration</li>
+                        <li>Previous School Report Card</li>
+                        <li>Transfer Certificate (if applicable)</li>
+                        <li>4 Recent Passport Photographs</li>
+                        <li>Parent/Guardian ID Card</li>
+                        <li>Immunization Records</li>
+                    </ul>
+                </div>
+                <div class="requirement-card">
+                    <h4>✏️ Entrance Examination</h4>
+                    <ul>
+                        <li>English Language</li>
+                        <li>Mathematics</li>
+                        <li>General Knowledge</li>
+                        <li>Verbal Reasoning</li>
+                        <li>Quantitative Reasoning</li>
+                        <li>Essay Writing (SS applicants)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Have Questions?</h2>
+            <p>Our admissions team is here to help. Contact us for more information about the application process.</p>
+            <a href="contact.html" class="btn btn-primary">Contact Us</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About BMHS</h4>
+                    <p>Baptist Model High School, Ilorin is committed to providing quality education that prepares students for academic excellence and moral leadership.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="academics.html">Academics</a>
+                    <a href="fees.html">School Fees</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p>📍 Ilorin, Kwara State, Nigeria</p>
+                    <p>📞 +234 801 234 5678</p>
+                    <p>✉️ info@bmhsilorin.edu.ng</p>
+                </div>
+                <div class="footer-section">
+                    <h4>School Hours</h4>
+                    <p>Monday - Friday: 7:30 AM - 3:30 PM</p>
+                    <p>Saturday: Closed</p>
+                    <p>Sunday: Closed</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Baptist Model High School, Ilorin. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            this.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+        });
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+        });
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Form Submission Handler
+        const parentForm = document.getElementById('parentForm');
+        const successMessage = document.getElementById('successMessage');
+
+        parentForm.addEventListener('submit', function(e) {
+            // The form will submit to Formspree
+            // This provides visual feedback
+            
+            // Scroll to top after submission
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+        });
+    </script>
+</body>
+</html>

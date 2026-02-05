@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Photo gallery showcasing life at Baptist Model High School, Ilorin.">
+    <title>Gallery | Baptist Model High School, Ilorin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f3460;
+            --accent: #ffd60a;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: var(--gray-800); background: var(--white); }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; height: auto; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; z-index: 1000; }
+        .header-top { background: var(--primary); padding: 15px 0; text-align: center; }
+        .header-content { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .logo { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; }
+        .school-info { color: var(--white); }
+        .school-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .school-motto { color: var(--accent); font-weight: 600; font-size: 1.1rem; font-style: italic; }
+
+        .nav { background: var(--primary); position: sticky; top: 0; z-index: 999; }
+        .nav-container { display: flex; justify-content: center; align-items: center; position: relative; }
+        .nav-menu { display: flex; list-style: none; gap: 5px; }
+        .nav-menu a { display: block; padding: 15px 18px; color: var(--white); font-weight: 500; transition: all 0.3s ease; font-size: 0.95rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: var(--accent); color: var(--primary); }
+
+        .hamburger { display: none; flex-direction: column; cursor: pointer; padding: 15px; gap: 5px; background: none; border: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); }
+        .hamburger span { width: 25px; height: 3px; background: var(--white); transition: all 0.3s ease; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+        .page-header { background: linear-gradient(135deg, var(--primary) 0%, #1a4980 100%); color: var(--white); padding: 60px 0; text-align: center; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+
+        .breadcrumb { background: var(--gray-100); padding: 15px 0; }
+        .breadcrumb-list { display: flex; gap: 10px; list-style: none; font-size: 0.9rem; }
+        .breadcrumb-list a { color: var(--primary); }
+        .breadcrumb-list span { color: var(--gray-600); }
+
+        .section { padding: 80px 0; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .section-title p { color: var(--gray-600); max-width: 600px; margin: 0 auto; }
+
+        /* Filter Buttons */
+        .filter-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+        .filter-btn { padding: 12px 25px; border: 2px solid var(--primary); background: transparent; color: var(--primary); border-radius: 30px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 0.95rem; }
+        .filter-btn:hover, .filter-btn.active { background: var(--primary); color: var(--white); }
+
+        /* Gallery Grid */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .gallery-item { position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; aspect-ratio: 4/3; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(15, 52, 96, 0.9) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-overlay h4 { color: var(--white); font-size: 1.1rem; margin-bottom: 5px; }
+        .gallery-overlay span { color: var(--accent); font-size: 0.9rem; }
+
+        /* Lightbox */
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
+        .lightbox.active { display: flex; }
+        .lightbox-content { position: relative; max-width: 90%; max-height: 90%; }
+        .lightbox-content img { max-width: 100%; max-height: 80vh; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .lightbox-close { position: absolute; top: -50px; right: 0; color: var(--white); font-size: 2.5rem; cursor: pointer; background: none; border: none; transition: color 0.3s ease; }
+        .lightbox-close:hover { color: var(--accent); }
+        .lightbox-caption { text-align: center; margin-top: 20px; }
+        .lightbox-caption h4 { color: var(--white); font-size: 1.3rem; margin-bottom: 5px; }
+        .lightbox-caption span { color: var(--accent); }
+        .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); color: var(--white); font-size: 3rem; cursor: pointer; background: rgba(255,255,255,0.1); border: none; padding: 10px 20px; border-radius: 5px; transition: all 0.3s ease; }
+        .lightbox-nav:hover { background: var(--accent); color: var(--primary); }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+
+        /* Categories Section */
+        .categories-section { padding: 60px 0; background: var(--primary); }
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .category-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 10px; text-align: center; transition: all 0.3s ease; cursor: pointer; }
+        .category-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-5px); }
+        .category-card .icon { font-size: 3rem; margin-bottom: 15px; }
+        .category-card h3 { color: var(--accent); margin-bottom: 5px; }
+        .category-card p { color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+
+        .footer { background: var(--primary); color: var(--white); padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h4 { color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; }
+        .footer-section p, .footer-section a { color: rgba(255,255,255,0.8); display: block; margin-bottom: 10px; transition: color 0.3s ease; }
+        .footer-section a:hover { color: var(--accent); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; text-align: center; color: rgba(255,255,255,0.7); }
+
+        @media (max-width: 768px) {
+            .school-name { font-size: 1.4rem; }
+            .hamburger { display: flex; }
+            .nav-container { flex-direction: column; }
+            .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--primary); position: absolute; top: 100%; left: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+            .nav-menu.active { display: flex; }
+            .nav-menu a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .page-header h1 { font-size: 2rem; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+            .lightbox-nav { font-size: 2rem; padding: 8px 15px; }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+        }
+        @media (max-width: 480px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .logo { width: 70px; height: 70px; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .filter-btn { padding: 10px 18px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-content">
+                    <img src="logo.jpg" alt="Baptist Model High School Logo" class="logo">
+                    <div class="school-info">
+                        <h1 class="school-name">Baptist Model High School, Ilorin</h1>
+                        <p class="school-motto">"We Study To Serve"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="academics.html">Academics</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="staff.html">Staff</a></li>
+                <li><a href="fees.html">Fees</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="parent-form.html">Parent Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Photo Gallery</h1>
+            <p>Capturing moments and memories at BMHS</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Home</a></li>
+                <li>/</li>
+                <li><span>Gallery</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>School Life in Pictures</h2>
+                <p>Explore the vibrant life at Baptist Model High School through our photo gallery</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Photos</button>
+                <button class="filter-btn" data-filter="campus">Campus</button>
+                <button class="filter-btn" data-filter="academics">Academics</button>
+                <button class="filter-btn" data-filter="sports">Sports</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+                <button class="filter-btn" data-filter="activities">Activities</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid">
+                <div class="gallery-item" data-category="campus" onclick="openLightbox(0)">
+                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=600&h=450&fit=crop" alt="School Building" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Main School Building</h4>
+                        <span>Campus</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="academics" onclick="openLightbox(1)">
+                    <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=450&fit=crop" alt="Classroom Session" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Classroom Learning</h4>
+                        <span>Academics</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sports" onclick="openLightbox(2)">
+                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&h=450&fit=crop" alt="Sports Day" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Inter-House Sports</h4>
+                        <span>Sports</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="events" onclick="openLightbox(3)">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=450&fit=crop" alt="Graduation Ceremony" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Graduation Ceremony</h4>
+                        <span>Events</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="academics" onclick="openLightbox(4)">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&h=450&fit=crop" alt="Science Laboratory" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Science Laboratory</h4>
+                        <span>Academics</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="campus" onclick="openLightbox(5)">
+                    <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=450&fit=crop" alt="School Library" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>School Library</h4>
+                        <span>Campus</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="activities" onclick="openLightbox(6)">
+                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600&h=450&fit=crop" alt="Cultural Day" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Cultural Day Celebration</h4>
+                        <span>Activities</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sports" onclick="openLightbox(7)">
+                    <img src="https://images.unsplash.com/photo-1461896836934- voices?w=600&h=450&fit=crop" alt="Football Match" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Football Championship</h4>
+                        <span>Sports</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="academics" onclick="openLightbox(8)">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=450&fit=crop" alt="Computer Lab" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>ICT Laboratory</h4>
+                        <span>Academics</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="events" onclick="openLightbox(9)">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=450&fit=crop" alt="Assembly" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Morning Assembly</h4>
+                        <span>Events</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="activities" onclick="openLightbox(10)">
+                    <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600&h=450&fit=crop" alt="Art Class" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Creative Arts Session</h4>
+                        <span>Activities</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="campus" onclick="openLightbox(11)">
+                    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=450&fit=crop" alt="School Premises" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>School Premises</h4>
+                        <span>Campus</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="events" onclick="openLightbox(12)">
+                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&h=450&fit=crop" alt="Prize Giving" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Prize Giving Day</h4>
+                        <span>Events</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="activities" onclick="openLightbox(13)">
+                    <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=600&h=450&fit=crop" alt="Debate" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Debate Competition</h4>
+                        <span>Activities</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sports" onclick="openLightbox(14)">
+                    <img src="https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?w=600&h=450&fit=crop" alt="Athletics" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Athletics Competition</h4>
+                        <span>Sports</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="academics" onclick="openLightbox(15)">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=450&fit=crop" alt="Study Session" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Study Session</h4>
+                        <span>Academics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterGallery('campus')">
+                    <div class="icon">🏫</div>
+                    <h3>Campus</h3>
+                    <p>School buildings & facilities</p>
+                </div>
+                <div class="category-card" onclick="filterGallery('academics')">
+                    <div class="icon">📚</div>
+                    <h3>Academics</h3>
+                    <p>Classroom & learning</p>
+                </div>
+                <div class="category-card" onclick="filterGallery('sports')">
+                    <div class="icon">⚽</div>
+                    <h3>Sports</h3>
+                    <p>Athletic activities</p>
+                </div>
+                <div class="category-card" onclick="filterGallery('events')">
+                    <div class="icon">🎉</div>
+                    <h3>Events</h3>
+                    <p>Special occasions</p>
+                </div>
+                <div class="category-card" onclick="filterGallery('activities')">
+                    <div class="icon">🎭</div>
+                    <h3>Activities</h3>
+                    <p>Clubs & extra-curricular</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close lightbox">&times;</button>
+        <button class="lightbox-nav lightbox-prev" onclick="changeSlide(-1)" aria-label="Previous image">&#10094;</button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Gallery Image">
+            <div class="lightbox-caption">
+                <h4 id="lightbox-title"></h4>
+                <span id="lightbox-category"></span>
+            </div>
+        </div>
+        <button class="lightbox-nav lightbox-next" onclick="changeSlide(1)" aria-label="Next image">&#10095;</button>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About BMHS</h4>
+                    <p>Baptist Model High School, Ilorin is committed to providing quality education that prepares students for academic excellence and moral leadership.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="academics.html">Academics</a>
+                    <a href="fees.html">School Fees</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p>📍 Ilorin, Kwara State, Nigeria</p>
+                    <p>📞 +234 xxx xxx xxxx</p>
+                    <p>✉️ info@bmhsilorin.edu.ng</p>
+                </div>
+                <div class="footer-section">
+                    <h4>School Hours</h4>
+                    <p>Monday - Friday: 7:30 AM - 3:30 PM</p>
+                    <p>Saturday: Closed</p>
+                    <p>Sunday: Closed</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Baptist Model High School, Ilorin. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            this.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+        });
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+        });
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Gallery Data
+        const galleryData = [
+            { src: 'https://images.unsplash.com/photo-1562774053-701939374585?w=1200', title: 'Main School Building', category: 'Campus' },
+            { src: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200', title: 'Classroom Learning', category: 'Academics' },
+            { src: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200', title: 'Inter-House Sports', category: 'Sports' },
+            { src: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200', title: 'Graduation Ceremony', category: 'Events' },
+            { src: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200', title: 'Science Laboratory', category: 'Academics' },
+            { src: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=1200', title: 'School Library', category: 'Campus' },
+            { src: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=1200', title: 'Cultural Day Celebration', category: 'Activities' },
+            { src: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200', title: 'Football Championship', category: 'Sports' },
+            { src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200', title: 'ICT Laboratory', category: 'Academics' },
+            { src: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200', title: 'Morning Assembly', category: 'Events' },
+            { src: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=1200', title: 'Creative Arts Session', category: 'Activities' },
+            { src: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200', title: 'School Premises', category: 'Campus' },
+            { src: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200', title: 'Prize Giving Day', category: 'Events' },
+            { src: 'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=1200', title: 'Debate Competition', category: 'Activities' },
+            { src: 'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?w=1200', title: 'Athletics Competition', category: 'Sports' },
+            { src: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200', title: 'Study Session', category: 'Academics' }
+        ];
+
+        let currentSlide = 0;
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxCategory = document.getElementById('lightbox-category');
+
+        // Filter Gallery
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.filter;
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        function filterGallery(category) {
+            filterBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            galleryItems.forEach(item => {
+                if (item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Scroll to gallery
+            document.querySelector('.gallery-grid').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Lightbox Functions
+        function openLightbox(index) {
+            currentSlide = index;
+            updateLightbox();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= galleryData.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = galleryData.length - 1;
+            updateLightbox();
+        }
+
+        function updateLightbox() {
+            lightboxImg.src = galleryData[currentSlide].src;
+            lightboxTitle.textContent = galleryData[currentSlide].title;
+            lightboxCategory.textContent = galleryData[currentSlide].category;
+        }
+
+        // Close lightbox on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Close lightbox when clicking outside image
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) closeLightbox();
+        });
+    </script>
+</body>
+</html>
